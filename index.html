@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111111">
+<title>Spaza Stock 📦</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --black:#111;
+  --yellow:#f5b700;
+  --yellow2:#ffcb45;
+  --cream:#f7f6f2;
+  --white:#fff;
+  --muted:#777;
+  --line:#e7e4dc;
+  --red:#d94b4b;
+  --green:#238447;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  padding-bottom:95px;
+  background:var(--cream);
+  color:var(--black);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,input,select{font:inherit}
+button{cursor:pointer}
+
+.topbar{
+  max-width:760px;
+  margin:auto;
+  padding:28px 20px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.eyebrow,
+.section-kicker{
+  margin:0 0 5px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+}
+
+.topbar h1{
+  margin:0;
+  font-size:28px;
+}
+
+.icon-btn{
+  width:42px;
+  height:42px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:var(--white);
+  font-size:20px;
+}
+
+main{
+  max-width:760px;
+  margin:auto;
+  padding:0 20px 30px;
+}
+
+.hero-card{
+  background:var(--black);
+  color:white;
+  border-radius:24px;
+  padding:26px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.hero-label{
+  display:block;
+  font-size:11px;
+  letter-spacing:.13em;
+  opacity:.65;
+  margin-bottom:8px;
+}
+
+.hero-card strong{
+  display:block;
+  font-size:36px;
+}
+
+.hero-profit{text-align:right}
+
+.hero-profit span{
+  display:block;
+  font-size:12px;
+  opacity:.6;
+  margin-bottom:5px;
+}
+
+.hero-profit b{
+  color:var(--yellow);
+  font-size:20px;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin:14px 0;
+}
+
+.stat-card{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+}
+
+.stat-card span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+.stat-card strong{font-size:27px}
+
+.stat-card.warning strong{color:var(--red)}
+
+.primary-action{
+  width:100%;
+  border:0;
+  border-radius:17px;
+  background:var(--yellow);
+  color:var(--black);
+  padding:16px 20px;
+  font-weight:800;
+  font-size:16px;
+  box-shadow:0 8px 20px rgba(245,183,0,.18);
+}
+
+.primary-action:hover{background:var(--yellow2)}
+
+.primary-action span{
+  font-size:22px;
+  vertical-align:-2px;
+}
+
+.section{margin-top:32px}
+
+.section-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-bottom:13px;
+}
+
+.section-heading h2{
+  margin:0;
+  font-size:21px;
+}
+
+.text-btn{
+  border:0;
+  background:none;
+  color:#9b7000;
+  font-weight:800;
+}
+
+.product-list,
+.low-stock-list{
+  display:grid;
+  gap:10px;
+}
+
+.product-card,
+.low-stock-card{
+  background:var(--white);
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:16px;
+}
+
+.product-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.product-info h3{
+  margin:0 0 5px;
+  font-size:16px;
+}
+
+.product-info p{
+  margin:0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.stock-pill{
+  white-space:nowrap;
+  background:#f2f0eb;
+  border-radius:999px;
+  padding:7px 10px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.stock-pill.low{
+  background:#fff0f0;
+  color:var(--red);
+}
+
+.low-stock-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.low-stock-card strong{font-size:14px}
+
+.low-stock-card span{
+  color:var(--red);
+  font-size:13px;
+  font-weight:800;
+}
+
+.empty{
+  padding:25px;
+  text-align:center;
+  color:var(--muted);
+  background:var(--white);
+  border:1px dashed var(--line);
+  border-radius:17px;
+}
+
+.bottom-nav{
+  position:fixed;
+  z-index:20;
+  left:50%;
+  bottom:12px;
+  transform:translateX(-50%);
+  width:min(calc(100% - 24px),520px);
+  background:rgba(17,17,17,.96);
+  border-radius:22px;
+  padding:8px;
+  display:flex;
+  justify-content:space-around;
+  box-shadow:0 15px 35px rgba(0,0,0,.2);
+}
+
+.nav-item{
+  flex:1;
+  border:0;
+  background:transparent;
+  color:#aaa;
+  padding:8px;
+  border-radius:16px;
+  font-size:18px;
+}
+
+.nav-item span{
+  display:block;
+  font-size:10px;
+  margin-top:3px;
+}
+
+.nav-item.active{
+  background:var(--yellow);
+  color:var(--black);
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:rgba(0,0,0,.5);
+  display:grid;
+  align-items:end;
+  padding:12px;
+}
+
+.modal.hidden{display:none}
+
+.modal-card{
+  width:min(100%,560px);
+  margin:auto;
+  background:var(--white);
+  border-radius:26px;
+  padding:25px 20px 22px;
+  position:relative;
+  max-height:92vh;
+  overflow:auto;
+}
+
+.modal-card h2{
+  margin:0 0 20px;
+  font-size:25px;
+}
+
+.close-btn{
+  position:absolute;
+  right:15px;
+  top:13px;
+  border:0;
+  background:#f1efeb;
+  border-radius:50%;
+  width:36px;
+  height:36px;
+  font-size:24px;
+}
+
+form{
+  display:grid;
+  gap:15px;
+}
+
+label{
+  display:grid;
+  gap:7px;
+  font-size:13px;
+  font-weight:700;
+}
+
+input,select{
+  width:100%;
+  border:1px solid var(--line);
+  background:#faf9f6;
+  border-radius:13px;
+  padding:13px;
+  outline:none;
+}
+
+input:focus,
+select:focus{
+  border-color:var(--yellow);
+}
+
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.sale-preview{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:#f7f3e7;
+  border-radius:15px;
+  padding:16px;
+}
+
+.sale-preview strong{
+  font-size:22px;
+}
+
+
+/* ================================
+   SHOP MATH
+================================ */
+
+.shop-math{
+  background:#f7f6f2;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin-top:2px;
+}
+
+.shop-math-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.shop-math-title strong{
+  font-size:15px;
+}
+
+.shop-math-title span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.cash-buttons{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:7px;
+  margin-top:9px;
+}
+
+.cash-btn{
+  border:1px solid var(--line);
+  background:var(--white);
+  border-radius:10px;
+  padding:9px 3px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.cash-btn:active{
+  background:var(--yellow);
+  border-color:var(--yellow);
+}
+
+.change-box{
+  margin-top:14px;
+  border-radius:15px;
+  padding:15px;
+  text-align:center;
+  background:var(--black);
+  color:white;
+}
+
+.change-label{
+  display:block;
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  opacity:.6;
+  margin-bottom:4px;
+}
+
+.change-amount{
+  display:block;
+  font-size:30px;
+  font-weight:900;
+  color:var(--yellow);
+}
+
+.change-box.short{
+  background:#fff0f0;
+  color:var(--red);
+}
+
+.change-box.short .change-amount{
+  color:var(--red);
+}
+
+.change-box.empty{
+  background:#eee;
+  color:var(--muted);
+  border:0;
+}
+
+.change-box.empty .change-amount{
+  color:var(--muted);
+  font-size:20px;
+}
+
+.toast{
+  position:fixed;
+  z-index:100;
+  left:50%;
+  bottom:95px;
+  transform:translate(-50%,20px);
+  background:var(--black);
+  color:white;
+  padding:12px 17px;
+  border-radius:999px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+  font-size:13px;
+  white-space:nowrap;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0);
+}
+
+@media(min-width:700px){
+  .modal{align-items:center}
+}
+
+@media(max-width:390px){
+  .cash-buttons{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<header class="topbar">
+
+  <div>
+    <p class="eyebrow">SPAZA STOCK</p>
+    <h1>Good day 👋</h1>
+  </div>
+
+  <button
+    class="icon-btn"
+    id="resetDemoBtn"
+    title="Clear shop data"
+    aria-label="Clear shop data"
+  >
+    ⚙️
+  </button>
+
+</header>
+
+
+<main>
+
+
+  <!-- DASHBOARD -->
+
+  <section class="hero-card">
+
+    <div>
+
+      <span class="hero-label">
+        TODAY'S SALES
+      </span>
+
+      <strong id="todaySales">
+        R0.00
+      </strong>
+
+    </div>
+
+
+    <div class="hero-profit">
+
+      <span>
+        Est. profit
+      </span>
+
+      <b id="todayProfit">
+        R0.00
+      </b>
+
+    </div>
+
+  </section>
+
+
+  <section class="stats-grid">
+
+    <article class="stat-card">
+
+      <span>
+        Products
+      </span>
+
+      <strong id="productCount">
+        0
+      </strong>
+
+    </article>
+
+
+    <article class="stat-card warning">
+
+      <span>
+        Low stock
+      </span>
+
+      <strong id="lowStockCount">
+        0
+      </strong>
+
+    </article>
+
+  </section>
+
+
+  <button
+    class="primary-action"
+    id="openSaleBtn"
+  >
+
+    <span>＋</span>
+
+    Record a sale
+
+  </button>
+
+
+  <!-- PRODUCTS -->
+
+  <section
+    class="section"
+    id="productsSection"
+  >
+
+    <div class="section-heading">
+
+      <div>
+
+        <p class="section-kicker">
+          YOUR SHOP
+        </p>
+
+        <h2>
+          Products
+        </h2>
+
+      </div>
+
+
+      <button
+        class="text-btn"
+        id="openProductBtn"
+      >
+
+        ＋ Add
+
+      </button>
+
+    </div>
+
+
+    <div
+      id="productList"
+      class="product-list"
+    ></div>
+
+  </section>
+
+
+  <!-- LOW STOCK -->
+
+  <section class="section">
+
+    <div class="section-heading">
+
+      <div>
+
+        <p class="section-kicker">
+          WATCH THIS
+        </p>
+
+        <h2>
+          Low stock
+        </h2>
+
+      </div>
+
+    </div>
+
+
+    <div
+      id="lowStockList"
+      class="low-stock-list"
+    ></div>
+
+  </section>
+
+
+</main>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <button
+    class="nav-item active"
+    id="navHome"
+  >
+
+    🏠
+
+    <span>
+      Home
+    </span>
+
+  </button>
+
+
+  <button
+    class="nav-item"
+    id="navProducts"
+  >
+
+    📦
+
+    <span>
+      Products
+    </span>
+
+  </button>
+
+
+  <button
+    class="nav-item"
+    id="navSale"
+  >
+
+    💰
+
+    <span>
+      Sell
+    </span>
+
+  </button>
+
+</nav>
+
+
+<!-- ADD PRODUCT MODAL -->
+
+<div
+  class="modal hidden"
+  id="productModal"
+>
+
+  <div class="modal-card">
+
+    <button
+      class="close-btn"
+      data-close="productModal"
+    >
+      ×
+    </button>
+
+
+    <p class="section-kicker">
+      NEW PRODUCT
+    </p>
+
+    <h2>
+      Add product
+    </h2>
+
+
+    <form id="productForm">
+
+
+      <label>
+
+        Product name
+
+        <input
+          id="productName"
+          required
+          placeholder="e.g. Coca-Cola 2L"
+        >
+
+      </label>
+
+
+      <div class="form-row">
+
+
+        <label>
+
+          Cost price
+
+          <input
+            id="costPrice"
+            required
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="12.00"
+          >
+
+        </label>
+
+
+        <label>
+
+          Selling price
+
+          <input
+            id="sellingPrice"
+            required
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="18.00"
+          >
+
+        </label>
+
+
+      </div>
+
+
+      <label>
+
+        Opening quantity
+
+        <input
+          id="openingQty"
+          required
+          type="number"
+          min="0"
+          step="1"
+          placeholder="10"
+        >
+
+      </label>
+
+
+      <button
+        class="primary-action"
+        type="submit"
+      >
+
+        Add product
+
+      </button>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<!-- SALE MODAL -->
+
+<div
+  class="modal hidden"
+  id="saleModal"
+>
+
+  <div class="modal-card">
+
+
+    <button
+      class="close-btn"
+      data-close="saleModal"
+    >
+      ×
+    </button>
+
+
+    <p class="section-kicker">
+      QUICK SALE
+    </p>
+
+
+    <h2>
+      Record a sale
+    </h2>
+
+
+    <form id="saleForm">
+
+
+      <label>
+
+        Product
+
+        <select
+          id="saleProduct"
+          required
+        ></select>
+
+      </label>
+
+
+      <label>
+
+        Quantity
+
+        <input
+          id="saleQty"
+          required
+          type="number"
+          min="1"
+          step="1"
+          value="1"
+        >
+
+      </label>
+
+
+      <div class="sale-preview">
+
+        <span>
+          Total
+        </span>
+
+        <strong id="saleTotal">
+          R0.00
+        </strong>
+
+      </div>
+
+
+      <!-- SHOP MATH -->
+
+      <div class="shop-math">
+
+
+        <div class="shop-math-title">
+
+          <strong>
+            🧮 Shop Math
+          </strong>
+
+          <span>
+            Calculate change
+          </span>
+
+        </div>
+
+
+        <label>
+
+          Customer pays
+
+          <input
+            id="cashReceived"
+            type="number"
+            min="0"
+            step="0.01"
+            inputmode="decimal"
+            placeholder="e.g. 100"
+          >
+
+        </label>
+
+
+        <div class="cash-buttons">
+
+          <button
+            type="button"
+            class="cash-btn"
+            data-cash="20"
+          >
+            R20
+          </button>
+
+          <button
+            type="button"
+            class="cash-btn"
+            data-cash="50"
+          >
+            R50
+          </button>
+
+          <button
+            type="button"
+            class="cash-btn"
+            data-cash="100"
+          >
+            R100
+          </button>
+
+          <button
+            type="button"
+            class="cash-btn"
+            data-cash="200"
+          >
+            R200
+          </button>
+
+          <button
+            type="button"
+            class="cash-btn"
+            data-cash="500"
+          >
+            R500
+          </button>
+
+        </div>
+
+
+        <div
+          class="change-box empty"
+          id="changeBox"
+        >
+
+          <span
+            class="change-label"
+            id="changeLabel"
+          >
+            Change
+          </span>
+
+          <span
+            class="change-amount"
+            id="changeAmount"
+          >
+            Enter amount
+          </span>
+
+        </div>
+
+
+      </div>
+
+
+      <button
+        class="primary-action"
+        type="submit"
+      >
+
+        Record sale
+
+      </button>
+
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+
+/* ==========================================
+   SPAZA STOCK
+   CLEAN MVP + SHOP MATH
+========================================== */
+
+
+/* STORAGE */
+
+const STORAGE_KEY = "spazaStockData_v1"; 
+/* DATA */
+
+let data =
+  loadData();
+
+
+/* LOAD */
+
+function loadData(){
+
+  const saved =
+    localStorage.getItem(
+      STORAGE_KEY
+    );
+
+  if(saved){
+
+    try{
+
+      const parsed =
+        JSON.parse(saved);
+
+      return {
+
+        products:
+          Array.isArray(
+            parsed.products
+          )
+            ? parsed.products
+            : [],
+
+        sales:
+          Array.isArray(
+            parsed.sales
+          )
+            ? parsed.sales
+            : []
+
+      };
+
+    }catch(error){
+
+      console.warn(
+        "Could not load saved data.",
+        error
+      );
+
+    }
+
+  }
+
+
+  return {
+
+    products:[],
+
+    sales:[]
+
+  };
+
+}
+
+
+/* SAVE */
+
+function saveData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify(data)
+  );
+
+}
+
+
+/* MONEY */
+
+function money(value){
+
+  return new Intl.NumberFormat(
+    "en-ZA",
+    {
+      style:"currency",
+      currency:"ZAR"
+    }
+  ).format(
+    value || 0
+  );
+
+}
+
+
+/* TODAY */
+
+function todaySales(){
+
+  const today =
+    new Date()
+      .toISOString()
+      .slice(0,10);
+
+
+  return data.sales.filter(
+    sale =>
+      sale.date === today
+  );
+
+}
+
+
+/* RENDER */
+
+function render(){
+
+  const sales =
+    todaySales();
+
+
+  const salesTotal =
+    sales.reduce(
+      (sum,sale) =>
+        sum + sale.total,
+      0
+    );
+
+
+  const profitTotal =
+    sales.reduce(
+      (sum,sale) =>
+        sum + sale.profit,
+      0
+    );
+
+
+  const lowStock =
+    data.products.filter(
+      product =>
+        product.qty <= 5
+    );
+
+
+  document.getElementById(
+    "todaySales"
+  ).textContent =
+    money(salesTotal);
+
+
+  document.getElementById(
+    "todayProfit"
+  ).textContent =
+    money(profitTotal);
+
+
+  document.getElementById(
+    "productCount"
+  ).textContent =
+    data.products.length;
+
+
+  document.getElementById(
+    "lowStockCount"
+  ).textContent =
+    lowStock.length;
+
+
+  renderProducts();
+
+  renderLowStock();
+
+  renderSaleProducts();
+
+}
+
+
+/* PRODUCTS */
+
+function renderProducts(){
+
+  const list =
+    document.getElementById(
+      "productList"
+    );
+
+
+  if(!data.products.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        No products yet.<br>
+        Add your first product above. 📦
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    data.products.map(
+      product => `
+
+      <article class="product-card">
+
+        <div class="product-info">
+
+          <h3>
+            ${escapeHtml(
+              product.name
+            )}
+          </h3>
+
+          <p>
+            ${money(product.price)}
+            selling ·
+            ${money(product.cost)}
+            cost
+          </p>
+
+        </div>
+
+
+        <span
+          class="stock-pill
+          ${product.qty <= 5
+            ? "low"
+            : ""}"
+        >
+
+          ${product.qty}
+          in stock
+
+        </span>
+
+      </article>
+
+    `
+    ).join("");
+
+}
+
+
+/* LOW STOCK */
+
+function renderLowStock(){
+
+  const list =
+    document.getElementById(
+      "lowStockList"
+    );
+
+
+  const low =
+    data.products.filter(
+      product =>
+        product.qty <= 5
+    );
+
+
+  if(!low.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        ${
+          data.products.length
+            ? "You're looking good. Nothing is running low. 🎉"
+            : "Your low-stock list will appear here."
+        }
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+    low.map(
+      product => `
+
+      <article class="low-stock-card">
+
+        <strong>
+          ${escapeHtml(
+            product.name
+          )}
+        </strong>
+
+        <span>
+          ${product.qty}
+          left
+        </span>
+
+      </article>
+
+    `
+    ).join("");
+
+}
+
+
+/* SALE PRODUCTS */
+
+function renderSaleProducts(){
+
+  const select =
+    document.getElementById(
+      "saleProduct"
+    );
+
+
+  if(!data.products.length){
+
+    select.innerHTML =
+      `<option value="">
+        Add a product first
+      </option>`;
+
+    updateSalePreview();
+
+    return;
+
+  }
+
+
+  const available =
+    data.products.filter(
+      product =>
+        product.qty > 0
+    );
+
+
+  if(!available.length){
+
+    select.innerHTML =
+      `<option value="">
+        No stock available
+      </option>`;
+
+    updateSalePreview();
+
+    return;
+
+  }
+
+
+  select.innerHTML =
+    available.map(
+      product => `
+
+      <option value="${product.id}">
+
+        ${escapeHtml(
+          product.name
+        )}
+        —
+        ${product.qty}
+        left
+
+      </option>
+
+    `
+    ).join("");
+
+
+  updateSalePreview();
+
+}
+
+
+/* SALE TOTAL */
+
+function getSaleTotal(){
+
+  const product =
+    data.products.find(
+      product =>
+        product.id ===
+        document.getElementById(
+          "saleProduct"
+        ).value
+    );
+
+
+  const qty =
+    Number(
+      document.getElementById(
+        "saleQty"
+      ).value
+    ) || 0;
+
+
+  return product
+    ? product.price * qty
+    : 0;
+
+}
+
+
+/* SALE PREVIEW */
+
+function updateSalePreview(){
+
+  const total =
+    getSaleTotal();
+
+
+  document.getElementById(
+    "saleTotal"
+  ).textContent =
+    money(total);
+
+
+  updateShopMath();
+
+}
+
+
+/* SHOP MATH */
+
+function updateShopMath(){
+
+  const total =
+    getSaleTotal();
+
+
+  const cashInput =
+    document.getElementById(
+      "cashReceived"
+    );
+
+
+  const changeBox =
+    document.getElementById(
+      "changeBox"
+    );
+
+
+  const changeAmount =
+    document.getElementById(
+      "changeAmount"
+    );
+
+
+  const changeLabel =
+    document.getElementById(
+      "changeLabel"
+    );
+
+
+  const cash =
+    Number(
+      cashInput.value
+    ) || 0;
+
+
+  changeBox.classList.remove(
+    "short",
+    "empty"
+  );
+
+
+  if(!cash){
+
+    changeBox.classList.add(
+      "empty"
+    );
+
+    changeLabel.textContent =
+      "Change";
+
+    changeAmount.textContent =
+      "Enter amount";
+
+    return;
+
+  }
+
+
+  if(cash >= total){
+
+    changeLabel.textContent =
+      "Change";
+
+    const change =
+      cash - total;
+
+
+    changeAmount.textContent =
+      money(change);
+
+    return;
+
+  }
+
+
+  const stillNeeded =
+    total - cash;
+
+
+  changeBox.classList.add(
+    "short"
+  );
+
+
+  changeLabel.textContent =
+    "Still needed";
+
+
+  changeAmount.textContent =
+    money(stillNeeded);
+
+}
+
+
+/* RESET SHOP MATH */
+
+function resetShopMath(){
+
+  document.getElementById(
+    "cashReceived"
+  ).value = "";
+
+
+  document.getElementById(
+    "changeBox"
+  ).className =
+    "change-box empty";
+
+
+  document.getElementById(
+    "changeLabel"
+  ).textContent =
+    "Change";
+
+
+  document.getElementById(
+    "changeAmount"
+  ).textContent =
+    "Enter amount";
+
+}
+
+
+/* MODALS */
+
+function openModal(id){
+
+  document
+    .getElementById(id)
+    .classList
+    .remove("hidden");
+
+}
+
+
+function closeModal(id){
+
+  document
+    .getElementById(id)
+    .classList
+    .add("hidden");
+
+}
+
+
+/* TOAST */
+
+function toast(message){
+
+  const el =
+    document.getElementById(
+      "toast"
+    );
+
+
+  el.textContent =
+    message;
+
+
+  el.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () =>
+      el.classList.remove(
+        "show"
+      ),
+    2200
+  );
+
+}
+
+
+/* OPEN PRODUCT */
+
+document
+  .getElementById(
+    "openProductBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "productForm"
+        )
+        .reset();
+
+
+      openModal(
+        "productModal"
+      );
+
+    }
+  );
+
+
+/* OPEN SALE */
+
+document
+  .getElementById(
+    "openSaleBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      if(
+        !data.products.length
+      ){
+
+        toast(
+          "Add a product first."
+        );
+
+        openModal(
+          "productModal"
+        );
+
+        return;
+
+      }
+
+
+      const available =
+        data.products.some(
+          product =>
+            product.qty > 0
+        );
+
+
+      if(!available){
+
+        toast(
+          "No stock available."
+        );
+
+        return;
+
+      }
+
+
+      document
+        .getElementById(
+          "saleQty"
+        )
+        .value = 1;
+
+
+      resetShopMath();
+
+
+      renderSaleProducts();
+
+
+      openModal(
+        "saleModal"
+      );
+
+    }
+  );
+
+
+/* NAV PRODUCTS */
+
+document
+  .getElementById(
+    "navProducts"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "productsSection"
+        )
+        .scrollIntoView({
+          behavior:"smooth"
+        });
+
+    }
+  );
+
+
+/* NAV SALE */
+
+document
+  .getElementById(
+    "navSale"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      document
+        .getElementById(
+          "openSaleBtn"
+        )
+        .click();
+
+    }
+  );
+
+
+/* NAV HOME */
+
+document
+  .getElementById(
+    "navHome"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+    }
+  );
+
+
+/* CLOSE BUTTONS */
+
+document
+  .querySelectorAll(
+    "[data-close]"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          closeModal(
+            button.dataset.close
+          );
+
+        }
+      );
+
+    }
+  );
+
+
+/* OUTSIDE MODAL */
+
+document
+  .querySelectorAll(
+    ".modal"
+  )
+  .forEach(
+    modal => {
+
+      modal.addEventListener(
+        "click",
+        event => {
+
+          if(
+            event.target === modal
+          ){
+
+            closeModal(
+              modal.id
+            );
+
+          }
+
+        }
+
+      );
+
+    }
+  );
+
+
+/* ADD PRODUCT */
+
+document
+  .getElementById(
+    "productForm"
+  )
+  .addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+
+      const product = {
+
+        id:
+          crypto.randomUUID(),
+
+        name:
+          document
+            .getElementById(
+              "productName"
+            )
+            .value
+            .trim(),
+
+        cost:
+          Number(
+            document
+              .getElementById(
+                "costPrice"
+              )
+              .value
+          ),
+
+        price:
+          Number(
+            document
+              .getElementById(
+                "sellingPrice"
+              )
+              .value
+          ),
+
+        qty:
+          Number(
+            document
+              .getElementById(
+                "openingQty"
+              )
+              .value
+          )
+
+      };
+
+
+      if(
+        !product.name ||
+        product.cost < 0 ||
+        product.price < 0 ||
+        product.qty < 0
+      ){
+
+        toast(
+          "Please check the details."
+        );
+
+        return;
+
+      }
+
+
+      data.products.push(
+        product
+      );
+
+
+      saveData();
+
+      render();
+
+      closeModal(
+        "productModal"
+      );
+
+
+      toast(
+        product.name +
+        " added 📦"
+      );
+
+    }
+  );
+
+
+/* SALE PRODUCT */
+
+document
+  .getElementById(
+    "saleProduct"
+  )
+  .addEventListener(
+    "change",
+    () => {
+
+      resetShopMath();
+
+      updateSalePreview();
+
+    }
+  );
+
+
+/* SALE QUANTITY */
+
+document
+  .getElementById(
+    "saleQty"
+  )
+  .addEventListener(
+    "input",
+    () => {
+
+      resetShopMath();
+
+      updateSalePreview();
+
+    }
+  );
+
+
+/* CUSTOMER CASH */
+
+document
+  .getElementById(
+    "cashReceived"
+  )
+  .addEventListener(
+    "input",
+    updateShopMath
+  );
+
+
+/* QUICK CASH BUTTONS */
+
+document
+  .querySelectorAll(
+    ".cash-btn"
+  )
+  .forEach(
+    button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          document
+            .getElementById(
+              "cashReceived"
+            )
+            .value =
+              button.dataset.cash;
+
+
+          updateShopMath();
+
+        }
+      );
+
+    }
+  );
+
+
+/* RECORD SALE */
+
+document
+  .getElementById(
+    "saleForm"
+  )
+  .addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+
+      const product =
+        data.products.find(
+          product =>
+            product.id ===
+            document
+              .getElementById(
+                "saleProduct"
+              )
+              .value
+        );
+
+
+      const qty =
+        Number(
+          document
+            .getElementById(
+              "saleQty"
+            )
+            .value
+        );
+
+
+      if(
+        !product ||
+        qty < 1 ||
+        !Number.isInteger(qty)
+      ){
+
+        toast(
+          "Choose a valid quantity."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        qty > product.qty
+      ){
+
+        toast(
+          "Only " +
+          product.qty +
+          " left in stock."
+        );
+
+        return;
+
+      }
+
+
+      const total =
+        product.price * qty;
+
+
+      const profit =
+        (
+          product.price -
+          product.cost
+        ) * qty;
+
+
+      product.qty -= qty;
+
+
+      data.sales.push({
+
+        id:
+          crypto.randomUUID(),
+
+        productId:
+          product.id,
+
+        productName:
+          product.name,
+
+        qty,
+
+        total,
+
+        profit,
+
+        date:
+          new Date()
+            .toISOString()
+            .slice(0,10),
+
+        createdAt:
+          new Date()
+            .toISOString()
+
+      });
+
+
+      saveData();
+
+      render();
+
+      closeModal(
+        "saleModal"
+      );
+
+
+      toast(
+        "Sale recorded: " +
+        money(total) +
+        " 💰"
+      );
+
+    }
+  );
+
+
+/* CLEAR SHOP DATA */
+
+document
+  .getElementById(
+    "resetDemoBtn"
+  )
+  .addEventListener(
+    "click",
+    () => {
+
+      if(
+        !confirm(
+          "This will erase all your products and sales. Continue?"
+        )
+      ){
+
+        return;
+
+      }
+
+
+      data = {
+
+        products:[],
+
+        sales:[]
+
+      };
+
+
+      saveData();
+
+      render();
+
+      toast(
+        "Shop data cleared."
+      );
+
+    }
+  );
+
+
+/* HTML SAFETY */
+
+function escapeHtml(value){
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* START */
+
+render();
+
+</script>
+
+</body>
+    </html>
