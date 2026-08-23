@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111111">
-<title>istolo 📦</title>
+<title>estolo 📦</title>
 
 <style>
 *{box-sizing:border-box}
@@ -356,9 +356,95 @@ select:focus{
 }
 
 
-/* ================================
-   SHOP MATH
-================================ */
+/* PRODUCT MANAGEMENT */
+
+.manage-product-list{
+  display:grid;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.manage-product{
+  background:#faf9f6;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:14px;
+}
+
+.manage-product-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.manage-product-info{
+  min-width:0;
+}
+
+.manage-product-info strong{
+  display:block;
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.manage-product-info span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.manage-stock{
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
+}
+
+.manage-stock.low{
+  color:var(--red);
+}
+
+.stock-controls{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+.stock-control{
+  border:1px solid var(--line);
+  background:var(--white);
+  border-radius:12px;
+  padding:11px 8px;
+  font-size:13px;
+  font-weight:800;
+}
+
+.stock-control:active{
+  background:var(--yellow);
+  border-color:var(--yellow);
+}
+
+.stock-control.remove{
+  color:var(--red);
+}
+
+.stock-control.add{
+  color:var(--green);
+}
+
+.add-new-product-btn{
+  width:100%;
+  border:1px solid var(--yellow);
+  background:var(--yellow);
+  color:var(--black);
+  border-radius:15px;
+  padding:14px 16px;
+  font-weight:800;
+}
+
+
+/* SHOP MATH */
 
 .shop-math{
   background:#f7f6f2;
@@ -484,13 +570,12 @@ select:focus{
 </style>
 </head>
 
-
 <body>
 
 <header class="topbar">
 
   <div>
-    <p class="eyebrow">istolo</p>
+    <p class="eyebrow">estolo</p>
     <h1>Good day 👋</h1>
   </div>
 
@@ -498,9 +583,6 @@ select:focus{
 
 
 <main>
-
-
-  <!-- DASHBOARD -->
 
   <section class="hero-card">
 
@@ -515,7 +597,6 @@ select:focus{
       </strong>
 
     </div>
-
 
     <div class="hero-profit">
 
@@ -574,8 +655,6 @@ select:focus{
   </button>
 
 
-  <!-- PRODUCTS -->
-
   <section
     class="section"
     id="productsSection"
@@ -616,8 +695,6 @@ select:focus{
   </section>
 
 
-  <!-- LOW STOCK -->
-
   <section class="section">
 
     <div class="section-heading">
@@ -644,11 +721,8 @@ select:focus{
 
   </section>
 
-
 </main>
 
-
-<!-- BOTTOM NAV -->
 
 <nav class="bottom-nav">
 
@@ -696,6 +770,53 @@ select:focus{
 </nav>
 
 
+<!-- PRODUCT MANAGEMENT MODAL -->
+
+<div
+  class="modal hidden"
+  id="manageProductsModal"
+>
+
+  <div class="modal-card">
+
+    <button
+      class="close-btn"
+      data-close="manageProductsModal"
+    >
+      ×
+    </button>
+
+
+    <p class="section-kicker">
+      YOUR SHOP
+    </p>
+
+    <h2>
+      Products
+    </h2>
+
+
+    <div
+      id="manageProductList"
+      class="manage-product-list"
+    ></div>
+
+
+    <button
+      type="button"
+      class="add-new-product-btn"
+      id="addNewProductBtn"
+    >
+
+      ＋ Add new product
+
+    </button>
+
+  </div>
+
+</div>
+
+
 <!-- ADD PRODUCT MODAL -->
 
 <div
@@ -724,7 +845,6 @@ select:focus{
 
     <form id="productForm">
 
-
       <label>
 
         Product name
@@ -739,7 +859,6 @@ select:focus{
 
 
       <div class="form-row">
-
 
         <label>
 
@@ -800,7 +919,6 @@ select:focus{
 
       </button>
 
-
     </form>
 
   </div>
@@ -816,7 +934,6 @@ select:focus{
 >
 
   <div class="modal-card">
-
 
     <button
       class="close-btn"
@@ -880,10 +997,7 @@ select:focus{
       </div>
 
 
-      <!-- SHOP MATH -->
-
       <div class="shop-math">
-
 
         <div class="shop-math-title">
 
@@ -980,7 +1094,6 @@ select:focus{
 
         </div>
 
-
       </div>
 
 
@@ -992,7 +1105,6 @@ select:focus{
         Record sale
 
       </button>
-
 
     </form>
 
@@ -1011,7 +1123,7 @@ select:focus{
 
   <div style="font-weight:bold;">
 
-    © <span style="font-weight:bold;">istolo</span> · by
+    © <span style="font-weight:bold;">estolo</span> · by
 
     <a
       href="https://studiosunsh1ne.github.io/studio/"
@@ -1028,30 +1140,19 @@ select:focus{
 <script>
 
 /* ==========================================
-   ISTOLO
+   ESTOLO
    CLEAN MVP + SHOP MATH
 ========================================== */
 
+const STORAGE_KEY = "estoloData_v1";
 
-/* STORAGE */
+let data = loadData();
 
-const STORAGE_KEY = "istoloData_v1";
-
-
-/* DATA */
-
-let data =
-  loadData();
-
-
-/* LOAD */
 
 function loadData(){
 
   const saved =
-    localStorage.getItem(
-      STORAGE_KEY
-    );
+    localStorage.getItem(STORAGE_KEY);
 
   if(saved){
 
@@ -1063,16 +1164,12 @@ function loadData(){
       return {
 
         products:
-          Array.isArray(
-            parsed.products
-          )
+          Array.isArray(parsed.products)
             ? parsed.products
             : [],
 
         sales:
-          Array.isArray(
-            parsed.sales
-          )
+          Array.isArray(parsed.sales)
             ? parsed.sales
             : []
 
@@ -1089,19 +1186,13 @@ function loadData(){
 
   }
 
-
   return {
-
     products:[],
-
     sales:[]
-
   };
 
 }
 
-
-/* SAVE */
 
 function saveData(){
 
@@ -1113,8 +1204,6 @@ function saveData(){
 }
 
 
-/* MONEY */
-
 function money(value){
 
   return new Intl.NumberFormat(
@@ -1123,45 +1212,35 @@ function money(value){
       style:"currency",
       currency:"ZAR"
     }
-  ).format(
-    value || 0
-  );
+  ).format(value || 0);
 
 }
 
 
-/* SOUTH AFRICAN LOCAL DATE */
-
 function localDate(){
 
-  const now =
-    new Date();
+  const now = new Date();
 
   const year =
     now.getFullYear();
 
   const month =
-    String(
-      now.getMonth() + 1
-    ).padStart(2,"0");
+    String(now.getMonth() + 1)
+      .padStart(2,"0");
 
   const day =
-    String(
-      now.getDate()
-    ).padStart(2,"0");
+    String(now.getDate())
+      .padStart(2,"0");
 
   return `${year}-${month}-${day}`;
 
 }
 
 
-/* TODAY */
-
 function todaySales(){
 
   const today =
     localDate();
-
 
   return data.sales.filter(
     sale =>
@@ -1171,13 +1250,10 @@ function todaySales(){
 }
 
 
-/* RENDER */
-
 function render(){
 
   const sales =
     todaySales();
-
 
   const salesTotal =
     sales.reduce(
@@ -1186,7 +1262,6 @@ function render(){
       0
     );
 
-
   const profitTotal =
     sales.reduce(
       (sum,sale) =>
@@ -1194,48 +1269,39 @@ function render(){
       0
     );
 
-
   const lowStock =
     data.products.filter(
       product =>
         product.qty <= 5
     );
 
-
   document.getElementById(
     "todaySales"
   ).textContent =
     money(salesTotal);
-
 
   document.getElementById(
     "todayProfit"
   ).textContent =
     money(profitTotal);
 
-
   document.getElementById(
     "productCount"
   ).textContent =
     data.products.length;
-
 
   document.getElementById(
     "lowStockCount"
   ).textContent =
     lowStock.length;
 
-
   renderProducts();
-
   renderLowStock();
-
   renderSaleProducts();
+  renderManageProducts();
 
 }
 
-
-/* PRODUCTS */
 
 function renderProducts(){
 
@@ -1243,7 +1309,6 @@ function renderProducts(){
     document.getElementById(
       "productList"
     );
-
 
   if(!data.products.length){
 
@@ -1258,7 +1323,6 @@ function renderProducts(){
 
   }
 
-
   list.innerHTML =
     data.products.map(
       product => `
@@ -1268,9 +1332,7 @@ function renderProducts(){
         <div class="product-info">
 
           <h3>
-            ${escapeHtml(
-              product.name
-            )}
+            ${escapeHtml(product.name)}
           </h3>
 
           <p>
@@ -1282,12 +1344,9 @@ function renderProducts(){
 
         </div>
 
-
         <span
           class="stock-pill
-          ${product.qty <= 5
-            ? "low"
-            : ""}"
+          ${product.qty <= 5 ? "low" : ""}"
         >
 
           ${product.qty}
@@ -1303,7 +1362,93 @@ function renderProducts(){
 }
 
 
-/* LOW STOCK */
+function renderManageProducts(){
+
+  const list =
+    document.getElementById(
+      "manageProductList"
+    );
+
+  if(!data.products.length){
+
+    list.innerHTML = `
+      <div class="empty">
+        No products yet.<br>
+        Add a new product below. 📦
+      </div>
+    `;
+
+    return;
+
+  }
+
+  list.innerHTML =
+    data.products.map(
+      product => `
+
+      <article class="manage-product">
+
+        <div class="manage-product-top">
+
+          <div class="manage-product-info">
+
+            <strong>
+              ${escapeHtml(product.name)}
+            </strong>
+
+            <span>
+              ${money(product.price)}
+              selling ·
+              ${money(product.cost)}
+              cost
+            </span>
+
+          </div>
+
+          <div
+            class="manage-stock
+            ${product.qty <= 5 ? "low" : ""}"
+          >
+
+            ${product.qty} in stock
+
+          </div>
+
+        </div>
+
+        <div class="stock-controls">
+
+          <button
+            type="button"
+            class="stock-control remove"
+            data-stock-action="remove"
+            data-product-id="${product.id}"
+          >
+
+            − Remove
+
+          </button>
+
+          <button
+            type="button"
+            class="stock-control add"
+            data-stock-action="add"
+            data-product-id="${product.id}"
+          >
+
+            ＋ Add
+
+          </button>
+
+        </div>
+
+      </article>
+
+    `
+    ).join("");
+
+}
+
 
 function renderLowStock(){
 
@@ -1312,13 +1457,11 @@ function renderLowStock(){
       "lowStockList"
     );
 
-
   const low =
     data.products.filter(
       product =>
         product.qty <= 5
     );
-
 
   if(!low.length){
 
@@ -1336,7 +1479,6 @@ function renderLowStock(){
 
   }
 
-
   list.innerHTML =
     low.map(
       product => `
@@ -1344,9 +1486,7 @@ function renderLowStock(){
       <article class="low-stock-card">
 
         <strong>
-          ${escapeHtml(
-            product.name
-          )}
+          ${escapeHtml(product.name)}
         </strong>
 
         <span>
@@ -1362,15 +1502,12 @@ function renderLowStock(){
 }
 
 
-/* SALE PRODUCTS */
-
 function renderSaleProducts(){
 
   const select =
     document.getElementById(
       "saleProduct"
     );
-
 
   if(!data.products.length){
 
@@ -1385,13 +1522,11 @@ function renderSaleProducts(){
 
   }
 
-
   const available =
     data.products.filter(
       product =>
         product.qty > 0
     );
-
 
   if(!available.length){
 
@@ -1406,16 +1541,13 @@ function renderSaleProducts(){
 
   }
 
-
   select.innerHTML =
     available.map(
       product => `
 
       <option value="${product.id}">
 
-        ${escapeHtml(
-          product.name
-        )}
+        ${escapeHtml(product.name)}
         —
         ${product.qty}
         left
@@ -1425,13 +1557,10 @@ function renderSaleProducts(){
     `
     ).join("");
 
-
   updateSalePreview();
 
 }
 
-
-/* SALE TOTAL */
 
 function getSaleTotal(){
 
@@ -1444,14 +1573,12 @@ function getSaleTotal(){
         ).value
     );
 
-
   const qty =
     Number(
       document.getElementById(
         "saleQty"
       ).value
     ) || 0;
-
 
   return product
     ? product.price * qty
@@ -1460,68 +1587,53 @@ function getSaleTotal(){
 }
 
 
-/* SALE PREVIEW */
-
 function updateSalePreview(){
 
   const total =
     getSaleTotal();
-
 
   document.getElementById(
     "saleTotal"
   ).textContent =
     money(total);
 
-
   updateShopMath();
 
 }
 
-
-/* SHOP MATH */
 
 function updateShopMath(){
 
   const total =
     getSaleTotal();
 
-
   const cashInput =
     document.getElementById(
       "cashReceived"
     );
-
 
   const changeBox =
     document.getElementById(
       "changeBox"
     );
 
-
   const changeAmount =
     document.getElementById(
       "changeAmount"
     );
-
 
   const changeLabel =
     document.getElementById(
       "changeLabel"
     );
 
-
   const cash =
-    Number(
-      cashInput.value
-    ) || 0;
-
+    Number(cashInput.value) || 0;
 
   changeBox.classList.remove(
     "short",
     "empty"
   );
-
 
   if(!cash){
 
@@ -1539,7 +1651,6 @@ function updateShopMath(){
 
   }
 
-
   if(cash >= total){
 
     changeLabel.textContent =
@@ -1548,7 +1659,6 @@ function updateShopMath(){
     const change =
       cash - total;
 
-
     changeAmount.textContent =
       money(change);
 
@@ -1556,19 +1666,15 @@ function updateShopMath(){
 
   }
 
-
   const stillNeeded =
     total - cash;
-
 
   changeBox.classList.add(
     "short"
   );
 
-
   changeLabel.textContent =
     "Still needed";
-
 
   changeAmount.textContent =
     money(stillNeeded);
@@ -1576,26 +1682,21 @@ function updateShopMath(){
 }
 
 
-/* RESET SHOP MATH */
-
 function resetShopMath(){
 
   document.getElementById(
     "cashReceived"
   ).value = "";
 
-
   document.getElementById(
     "changeBox"
   ).className =
     "change-box empty";
 
-
   document.getElementById(
     "changeLabel"
   ).textContent =
     "Change";
-
 
   document.getElementById(
     "changeAmount"
@@ -1604,8 +1705,6 @@ function resetShopMath(){
 
 }
 
-
-/* MODALS */
 
 function openModal(id){
 
@@ -1627,8 +1726,6 @@ function closeModal(id){
 }
 
 
-/* TOAST */
-
 function toast(message){
 
   const el =
@@ -1636,15 +1733,12 @@ function toast(message){
       "toast"
     );
 
-
   el.textContent =
     message;
-
 
   el.classList.add(
     "show"
   );
-
 
   setTimeout(
     () =>
@@ -1657,7 +1751,20 @@ function toast(message){
 }
 
 
-/* OPEN PRODUCT */
+function openAddProductModal(){
+
+  document
+    .getElementById(
+      "productForm"
+    )
+    .reset();
+
+  openModal(
+    "productModal"
+  );
+
+}
+
 
 document
   .getElementById(
@@ -1665,24 +1772,27 @@ document
   )
   .addEventListener(
     "click",
+    openAddProductModal
+  );
+
+
+document
+  .getElementById(
+    "addNewProductBtn"
+  )
+  .addEventListener(
+    "click",
     () => {
 
-      document
-        .getElementById(
-          "productForm"
-        )
-        .reset();
-
-
-      openModal(
-        "productModal"
+      closeModal(
+        "manageProductsModal"
       );
+
+      openAddProductModal();
 
     }
   );
 
-
-/* OPEN SALE */
 
 document
   .getElementById(
@@ -1692,29 +1802,23 @@ document
     "click",
     () => {
 
-      if(
-        !data.products.length
-      ){
+      if(!data.products.length){
 
         toast(
           "Add a product first."
         );
 
-        openModal(
-          "productModal"
-        );
+        openAddProductModal();
 
         return;
 
       }
-
 
       const available =
         data.products.some(
           product =>
             product.qty > 0
         );
-
 
       if(!available){
 
@@ -1726,19 +1830,15 @@ document
 
       }
 
-
       document
         .getElementById(
           "saleQty"
         )
         .value = 1;
 
-
       resetShopMath();
 
-
       renderSaleProducts();
-
 
       openModal(
         "saleModal"
@@ -1748,8 +1848,6 @@ document
   );
 
 
-/* NAV PRODUCTS */
-
 document
   .getElementById(
     "navProducts"
@@ -1758,19 +1856,15 @@ document
     "click",
     () => {
 
-      document
-        .getElementById(
-          "productsSection"
-        )
-        .scrollIntoView({
-          behavior:"smooth"
-        });
+      renderManageProducts();
+
+      openModal(
+        "manageProductsModal"
+      );
 
     }
   );
 
-
-/* NAV SALE */
 
 document
   .getElementById(
@@ -1790,8 +1884,6 @@ document
   );
 
 
-/* NAV HOME */
-
 document
   .getElementById(
     "navHome"
@@ -1808,8 +1900,6 @@ document
     }
   );
 
-
-/* CLOSE BUTTONS */
 
 document
   .querySelectorAll(
@@ -1832,8 +1922,6 @@ document
     }
   );
 
-
-/* OUTSIDE MODAL */
 
 document
   .querySelectorAll(
@@ -1864,7 +1952,86 @@ document
   );
 
 
-/* ADD PRODUCT */
+document
+  .getElementById(
+    "manageProductList"
+  )
+  .addEventListener(
+    "click",
+    event => {
+
+      const button =
+        event.target.closest(
+          "[data-stock-action]"
+        );
+
+      if(!button){
+        return;
+      }
+
+      const product =
+        data.products.find(
+          product =>
+            product.id ===
+            button.dataset.productId
+        );
+
+      if(!product){
+        return;
+      }
+
+      if(
+        button.dataset.stockAction ===
+        "add"
+      ){
+
+        product.qty += 1;
+
+        saveData();
+
+        render();
+
+        toast(
+          product.name +
+          " stock increased 📦"
+        );
+
+        return;
+
+      }
+
+      if(
+        button.dataset.stockAction ===
+        "remove"
+      ){
+
+        if(product.qty <= 0){
+
+          toast(
+            product.name +
+            " is already at 0."
+          );
+
+          return;
+
+        }
+
+        product.qty -= 1;
+
+        saveData();
+
+        render();
+
+        toast(
+          product.name +
+          " stock reduced."
+        );
+
+      }
+
+    }
+  );
+
 
 document
   .getElementById(
@@ -1875,7 +2042,6 @@ document
     event => {
 
       event.preventDefault();
-
 
       const product = {
 
@@ -1919,7 +2085,6 @@ document
 
       };
 
-
       if(
         !product.name ||
         product.cost < 0 ||
@@ -1935,11 +2100,9 @@ document
 
       }
 
-
       data.products.push(
         product
       );
-
 
       saveData();
 
@@ -1949,7 +2112,6 @@ document
         "productModal"
       );
 
-
       toast(
         product.name +
         " added 📦"
@@ -1958,8 +2120,6 @@ document
     }
   );
 
-
-/* SALE PRODUCT */
 
 document
   .getElementById(
@@ -1977,8 +2137,6 @@ document
   );
 
 
-/* SALE QUANTITY */
-
 document
   .getElementById(
     "saleQty"
@@ -1995,8 +2153,6 @@ document
   );
 
 
-/* CUSTOMER CASH */
-
 document
   .getElementById(
     "cashReceived"
@@ -2006,8 +2162,6 @@ document
     updateShopMath
   );
 
-
-/* QUICK CASH BUTTONS */
 
 document
   .querySelectorAll(
@@ -2027,7 +2181,6 @@ document
             .value =
               button.dataset.cash;
 
-
           updateShopMath();
 
         }
@@ -2036,8 +2189,6 @@ document
     }
   );
 
-
-/* RECORD SALE */
 
 document
   .getElementById(
@@ -2048,7 +2199,6 @@ document
     event => {
 
       event.preventDefault();
-
 
       const product =
         data.products.find(
@@ -2061,7 +2211,6 @@ document
               .value
         );
 
-
       const qty =
         Number(
           document
@@ -2070,7 +2219,6 @@ document
             )
             .value
         );
-
 
       if(
         !product ||
@@ -2086,7 +2234,6 @@ document
 
       }
 
-
       if(
         qty > product.qty
       ){
@@ -2101,10 +2248,8 @@ document
 
       }
 
-
       const total =
         product.price * qty;
-
 
       const profit =
         (
@@ -2112,9 +2257,7 @@ document
           product.cost
         ) * qty;
 
-
       product.qty -= qty;
-
 
       data.sales.push({
 
@@ -2142,7 +2285,6 @@ document
 
       });
 
-
       saveData();
 
       render();
@@ -2150,7 +2292,6 @@ document
       closeModal(
         "saleModal"
       );
-
 
       toast(
         "Sale recorded: " +
@@ -2161,8 +2302,6 @@ document
     }
   );
 
-
-/* HTML SAFETY */
 
 function escapeHtml(value){
 
@@ -2195,8 +2334,6 @@ function escapeHtml(value){
 
 }
 
-
-/* START */
 
 render();
 
