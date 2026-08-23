@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111111">
-<title>Estolo 📦</title>
+<title>istolo 📦</title>
 
 <style>
 *{box-sizing:border-box}
@@ -54,15 +54,6 @@ button{cursor:pointer}
 .topbar h1{
   margin:0;
   font-size:28px;
-}
-
-.icon-btn{
-  width:42px;
-  height:42px;
-  border:1px solid var(--line);
-  border-radius:50%;
-  background:var(--white);
-  font-size:20px;
 }
 
 main{
@@ -489,11 +480,6 @@ select:focus{
   .cash-buttons{
     grid-template-columns:repeat(3,1fr);
   }
-
-
-}
-
-
 }
 </style>
 </head>
@@ -504,18 +490,9 @@ select:focus{
 <header class="topbar">
 
   <div>
-    <p class="eyebrow">Estolo</p>
+    <p class="eyebrow">istolo</p>
     <h1>Good day 👋</h1>
   </div>
-
-  <button
-    class="icon-btn"
-    id="resetDemoBtn"
-    title="Clear shop data"
-    aria-label="Clear shop data"
-  >
-    ⚙️
-  </button>
 
 </header>
 
@@ -795,7 +772,6 @@ select:focus{
 
         </label>
 
-
       </div>
 
 
@@ -1031,28 +1007,37 @@ select:focus{
 ></div>
 
 
+<footer style="text-align:center; padding:24px 16px; font-size:13px; color:inherit; font-family:inherit;">
 
-      <footer style="text-align:center; padding:24px 16px; font-size:13px; color:inherit; font-family:inherit;">
   <div style="font-weight:bold;">
-    © <span style="font-weight:bold;">Estolo</span> · by
-    <a href="https://studiosunsh1ne.github.io/studio/"
-       style="font-weight:bold; color:inherit; text-decoration:none;">
+
+    © <span style="font-weight:bold;">istolo</span> · by
+
+    <a
+      href="https://studiosunsh1ne.github.io/studio/"
+      style="font-weight:bold; color:inherit; text-decoration:none;"
+    >
       Studio Sünshine 🌞
     </a>
+
   </div>
+
 </footer>
+
 
 <script>
 
 /* ==========================================
-   SPAZA STOCK
+   ISTOLO
    CLEAN MVP + SHOP MATH
 ========================================== */
 
 
 /* STORAGE */
 
-const STORAGE_KEY = "spazaStockData_v1"; 
+const STORAGE_KEY = "istoloData_v1";
+
+
 /* DATA */
 
 let data =
@@ -1145,14 +1130,37 @@ function money(value){
 }
 
 
+/* SOUTH AFRICAN LOCAL DATE */
+
+function localDate(){
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(2,"0");
+
+  const day =
+    String(
+      now.getDate()
+    ).padStart(2,"0");
+
+  return `${year}-${month}-${day}`;
+
+}
+
+
 /* TODAY */
 
 function todaySales(){
 
   const today =
-    new Date()
-      .toISOString()
-      .slice(0,10);
+    localDate();
 
 
   return data.sales.filter(
@@ -2126,9 +2134,7 @@ document
         profit,
 
         date:
-          new Date()
-            .toISOString()
-            .slice(0,10),
+          localDate(),
 
         createdAt:
           new Date()
@@ -2150,48 +2156,6 @@ document
         "Sale recorded: " +
         money(total) +
         " 💰"
-      );
-
-    }
-  );
-
-
-/* CLEAR SHOP DATA */
-
-document
-  .getElementById(
-    "resetDemoBtn"
-  )
-  .addEventListener(
-    "click",
-    () => {
-
-      if(
-        !confirm(
-          "This will erase all your products and sales. Continue?"
-        )
-      ){
-
-        return;
-
-      }
-
-
-      data = {
-
-        products:[],
-
-        sales:[]
-
-      };
-
-
-      saveData();
-
-      render();
-
-      toast(
-        "Shop data cleared."
       );
 
     }
